@@ -89,6 +89,7 @@ for epoch_num in range(trainEpochs):
 
 
     for i, data in enumerate(trDataloader):
+        print(f"[{epoch_num+1}/trainEpochs, {i+1}/{len(trDataloader)}]")
 
         st_time = time.time()
         flag, hist, nbrs, mask, lat_enc, lon_enc, fut, op_mask, veh_id, t, ds, targetID, targetLoc = data
