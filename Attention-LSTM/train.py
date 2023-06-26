@@ -21,7 +21,7 @@ args['out_length'] = 20
 args['grid_size'] = (265,3) # (660/5 *2 +1 )*3
 args['input_embedding_size'] = 32 # input dimension for lstm encoder, adjustable
 args['train_flag'] = True
-args['data_dir'] = '/content/VTP/data/'
+args['data_dir'] = '/content/drive/MyDrive/02.University/04.研究室/attention-LSTM-dataset/'
 
 
 
