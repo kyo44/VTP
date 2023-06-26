@@ -21,6 +21,7 @@ args['out_length'] = 20
 args['grid_size'] = (265,3) # (660/5 *2 +1 )*3
 args['input_embedding_size'] = 32 # input dimension for lstm encoder, adjustable
 args['train_flag'] = True
+args['data_dir'] = '/content/drive/MyDrive/02.University/04.研究室/attention-LSTM-dataset/'
 
 
 
@@ -59,8 +60,8 @@ crossEnt = torch.nn.BCELoss() # binary cross entropy
 
 cav_ratio = 0.4 # change CAV percentage here -1 means CAV market place = 0, no neighbor CAV
 t_h = 30 # historical step 30 
-trSet = ngsimDataset('../../data/trajectory/TrainSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
-valSet = ngsimDataset('../../data/trajectory/ValSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
+trSet = ngsimDataset(f'{args["data_dir"]}/TrainSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
+valSet = ngsimDataset(f'{args["data_dir"]}/ValSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
 trDataloader = DataLoader(trSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=trSet.collate_fn)
 valDataloader = DataLoader(valSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=valSet.collate_fn)
 
