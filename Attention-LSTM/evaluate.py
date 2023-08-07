@@ -25,7 +25,7 @@ args['train_flag'] = False
 args['dropout'] = 0
 batch_size = 128
 
-args['pkl'] = False
+args['pkl'] = True
 # Evaluation metric:
 #metric = 'nll'  #or rmse
 metric = 'rmse'
@@ -43,12 +43,12 @@ def main():
         net = net.cuda()
 
     if args['pkl']:
-        with open('trained_models/tsDataloader.pkl', 'rb') as f:
+        with open('trained_models/train_dataset.pkl', 'rb') as f:
             tsDataloader = pkl.load(f)
     else:
         tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
         tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
-        with open('trained_models/tsDataloader.pkl', 'wb') as f:
+        with open('trained_models/train_dataset.pkl', 'wb') as f:
             pkl.dump(tsDataloader, f)
 
 
@@ -77,13 +77,10 @@ def main():
     num_test = 0
 
     print(f"time = {time.time() - st_time}s")
-    print(f"data_0 = {tsDataloader[0]}")
-    return
     for i, data in enumerate(tsDataloader):
         #print (i)
         
 
-        st_time = time.time()
         flag, hist, nbrs, mask, lat_enc, lon_enc, fut, op_mask, veh_id, t, ds, targetID, targetLoc = data
         if flag == 0: # this happens when no target HDV in front
             continue
@@ -143,7 +140,6 @@ def main():
         #nbr_location.append(np.array(nbr_loc))
         
         #print (len(pred))
-        print(f"{l.detach()}")
         lossVal +=l.detach() # revised by Lei
         count += c.detach()
 
