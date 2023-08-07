@@ -37,18 +37,20 @@ def main():
     st_time = time.time()
     # Initialize network
     net = highwayNet(args)
+    net.load_state_dict(torch.load('trained_models/lstm_horizon_40_att_cav_'+str(cav)+'.tar'))
+    #net.load_state_dict(torch.load('trained_models/front_529_lstm_horizon_40_att_cav_'+str(cav)+'_Hsteps_'+str(t_h)+'_whole_round'+str(r+1)+'.tar')) #
+    if args['use_cuda']:
+        net = net.cuda()
+
     if args['pkl']:
-        with open('trained_models/pickled.pkl', 'rb') as f:
-            net = pkl.load(f)
+        with open('trained_models/tsDataloader.pkl', 'rb') as f:
+            tsDataloader = pkl.load(f)
     else:
-        net.load_state_dict(torch.load('trained_models/lstm_horizon_40_att_cav_'+str(cav)+'.tar'))
-        #net.load_state_dict(torch.load('trained_models/front_529_lstm_horizon_40_att_cav_'+str(cav)+'_Hsteps_'+str(t_h)+'_whole_round'+str(r+1)+'.tar')) #
-        if args['use_cuda']:
-            net = net.cuda()
-        with open('trained_models/pickled.pkl', 'wb') as f:
-            pkl.dump(net, f)
-    tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
-    tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
+        tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
+        tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
+        with open('trained_models/tsDataloader.pkl', 'wb') as f:
+            pkl.dump(tsDataloader, f)
+
 
     lossVals = torch.zeros(25).cuda()
     counts = torch.zeros(25).cuda()
@@ -75,6 +77,7 @@ def main():
     num_test = 0
 
     print(f"time = {time.time() - st_time}s")
+    print(f"data_0 = {tsDataloader[0]}")
     return
     for i, data in enumerate(tsDataloader):
         #print (i)
