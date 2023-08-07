@@ -7,6 +7,7 @@ import time
 import pandas as pd
 import numpy as np
 
+import time
 import pickle as pkl
 
 ## Network Arguments
@@ -33,6 +34,7 @@ t_h = 30 # 30 or 60
 r = 3
 
 def main():
+    st_time = time.time()
     # Initialize network
     net = highwayNet(args)
     if args['pkl']:
@@ -45,7 +47,6 @@ def main():
             net = net.cuda()
         with open('trained_models/pickled.pkl', 'wb') as f:
             pkl.dump(net, f)
-
     tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
     tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
 
@@ -73,6 +74,8 @@ def main():
 
     num_test = 0
 
+    print(f"time = {time.time() - st_time}s")
+    return
     for i, data in enumerate(tsDataloader):
         #print (i)
         
@@ -198,3 +201,4 @@ def main():
 if __name__ == "__main__":
     print(f"===== evaluate.py =====")
     main()
+    print(f"fin evaluate.py")
