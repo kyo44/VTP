@@ -37,7 +37,7 @@ net.load_state_dict(torch.load('trained_models/lstm_horizon_40_att_cav_'+str(cav
 if args['use_cuda']:
     net = net.cuda()
 
-tsSet = ngsimDataset('../../data/trajectory/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
+tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
 tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
 
 lossVals = torch.zeros(25).cuda()

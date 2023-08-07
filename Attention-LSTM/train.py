@@ -21,8 +21,7 @@ args['out_length'] = 20
 args['grid_size'] = (265,3) # (660/5 *2 +1 )*3
 args['input_embedding_size'] = 32 # input dimension for lstm encoder, adjustable
 args['train_flag'] = True
-args['data_dir'] = '/content/drive/MyDrive/02.University/04.研究室/part-time/attention-LSTM-dataset/'
-# args['data_dir'] = '/home/hatakeyama/tool/VTP/dataset/'
+args['data_dir'] = '/home/hatakeyama/tool/VTP/attention-LSTM-dataset/'
 
 
 
@@ -60,7 +59,7 @@ batch_size = 128
 crossEnt = torch.nn.BCELoss() # binary cross entropy
 
 cav_ratio = 0.4 # change CAV percentage here -1 means CAV market place = 0, no neighbor CAV
-t_h = 30 # historical step 30 
+t_h = 30 # historical step 30
 trSet = ngsimDataset(f'{args["data_dir"]}/TrainSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
 valSet = ngsimDataset(f'{args["data_dir"]}/ValSet_us101.mat', t_h=t_h, CAV_ratio=cav_ratio)
 trDataloader = DataLoader(trSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=trSet.collate_fn)
@@ -90,8 +89,6 @@ for epoch_num in range(trainEpochs):
 
 
     for i, data in enumerate(trDataloader):
-        print(f"[{epoch_num+1}/trainEpochs, {i+1}/{len(trDataloader)}]")
-
         st_time = time.time()
         flag, hist, nbrs, mask, lat_enc, lon_enc, fut, op_mask, veh_id, t, ds, targetID, targetLoc = data
 
