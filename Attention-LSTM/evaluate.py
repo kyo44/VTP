@@ -43,9 +43,11 @@ def main():
         net = net.cuda()
 
     if args['pkl']:
+        print("read pkl file")
         with open('trained_models/test_dataset.pkl', 'rb') as f:
             tsDataloader = pkl.load(f)
     else:
+        print("read mat file")
         tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
         tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
         with open('trained_models/test_dataset.pkl', 'wb') as f:
@@ -76,7 +78,7 @@ def main():
 
     num_test = 0
 
-    print(f"time = {time.time() - st_time}s")
+    print(f"time = {time.time() - st_time:.2f}s")
     for i, data in enumerate(tsDataloader):
         #print (i)
         
