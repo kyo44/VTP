@@ -35,22 +35,23 @@ r = 3
 
 def main():
     st_time = time.time()
+    base_dir: str = "/home/hatakeyama/tool/VTP"
     # Initialize network
     net = highwayNet(args)
-    net.load_state_dict(torch.load('trained_models/lstm_horizon_40_att_cav_'+str(cav)+'.tar'))
+    net.load_state_dict(torch.load(f'{base_dir}/trained_models/lstm_horizon_40_att_cav_'+str(cav)+'.tar'))
     #net.load_state_dict(torch.load('trained_models/front_529_lstm_horizon_40_att_cav_'+str(cav)+'_Hsteps_'+str(t_h)+'_whole_round'+str(r+1)+'.tar')) #
     if args['use_cuda']:
         net = net.cuda()
 
     if args['pkl']:
         print("read pkl file")
-        with open('trained_models/test_dataset.pkl', 'rb') as f:
+        with open(f'{base_dir}/trained_models/test_dataset.pkl', 'rb') as f:
             tsDataloader = pkl.load(f)
     else:
         print("read mat file")
-        tsSet = ngsimDataset('/home/hatakeyama/tool/VTP/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
+        tsSet = ngsimDataset(f'{base_dir}/attention-LSTM-dataset/TestSet_us101.mat', t_h=t_h, enc_size =64, CAV_ratio=cav)
         tsDataloader = DataLoader(tsSet,batch_size=batch_size,shuffle=True,num_workers=8,collate_fn=tsSet.collate_fn) # 
-        with open('trained_models/test_dataset.pkl', 'wb') as f:
+        with open(f'{base_dir}/trained_models/test_dataset.pkl', 'wb') as f:
             pkl.dump(tsDataloader, f)
 
 

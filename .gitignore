@@ -1,2 +1,4 @@
 Attention-LSTM/__pycache__/
 dataset/
+attention-LSTM-dataset/
+trained_models/
